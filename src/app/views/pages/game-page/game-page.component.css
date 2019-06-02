@@ -3,6 +3,12 @@
     height: auto;
 }
 
+.input-group-prepend {
+  background-color: #aaa;
+  border-radius: 5px; 
+  
+}
+
 /* Curl Top Left */
 .hvr-curl-top-left {
     display: inline-block;

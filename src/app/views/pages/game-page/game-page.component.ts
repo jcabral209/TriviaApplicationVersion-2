@@ -27,12 +27,12 @@ export class GamePageComponent implements OnInit, OnDestroy {
   userA: string;
   correctA: string;
   noQuestions = 10;
-  answerA: any[];
+  triviaAnswers: any[];
 
   constructor(private triviaGame: GetDataService,
-              private _route: ActivatedRoute,
-              private _router: Router,
-              private grabDataService: GrabDataService) { }
+    private _route: ActivatedRoute,
+    private _router: Router,
+    private grabDataService: GrabDataService) { }
 
   ngOnInit() {
     this.initialize();
@@ -40,6 +40,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
       this.levelId = params.levelId;
       this.topic = params.topic;
       this.getQuestions();
+      this.varInit();
     });
   }
   initialize() {
@@ -50,7 +51,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.grabDataService.getTriviaQuestions(this.topic, this.levelId).subscribe(
         x => {
-          console.log('This my NEW API call --->>>> ', x);
+          // console.log('This my NEW API call --->>>> ', x);
           for (const q of x.feed.entry) {
             const nfo: SpecData = {
               category: q['gsx$category']['$t'],
@@ -63,9 +64,10 @@ export class GamePageComponent implements OnInit, OnDestroy {
               correct_answer: q['gsx$correctanswer']['$t']
             };
             this.triviaQ.push(nfo);
-            console.log ('My triviaQ ++++++> ', this.triviaQ.length);
+            // console.log ('My triviaQ ++++++> ', this.triviaQ.length);
           }
-          
+          this.triviaGame.shuffleArray(this.qOrder, this.triviaQ.length);
+          this.displayTriviaQ(this.userA);
         }
       ));
     /* console.log('This is what I have in triviaQ', Object.getOwnPropertyNames(this.triviaQ));
@@ -77,7 +79,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
     this.triviaQ = [];
     this.qOrder = [];
     this.aOrder = [];
-    this.answerA = [];
+    this.triviaAnswers = [];
     this.qIndex = 0;
     this.correctCount = 0;
     this.q = 'Nothing To Display';
@@ -87,7 +89,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
     this.a4 = 'Nothing To Display';
     this.userA = 'none';
     this.correctA = '';
-    this.getQuestions();
+    // this.getQuestions();
   }
   displayTriviaQ(ans: string) {
     if (this.qIndex < this.noQuestions) {
@@ -95,38 +97,31 @@ export class GamePageComponent implements OnInit, OnDestroy {
         this.correctCount++;
       }
       this.triviaGame.shuffleArray(this.aOrder, 4);
-      console.log('This is the order of the answers --> ', this.aOrder);
-      console.log(
-        'displayTriviaQ() SAYS -> ',
-        this.triviaQ[this.qOrder[this.qIndex]]
-      );
-      /* console.log('This is index for answer 1 ===> ', this.aOrder[0]);
-      console.log(
-        'This is content for answer 1 from aOrder ===> ',
-        this.triviaQ[this.qOrder[this.aOrder[0]]].a1
-      ); */
-      this.answerA[0] = this.triviaQ[this.qOrder[this.qIndex]].answer_1;
-      this.answerA[1] = this.triviaQ[this.qOrder[this.qIndex]].answer_2;
-      this.answerA[2] = this.triviaQ[this.qOrder[this.qIndex]].answer_3;
-      this.answerA[3] = this.triviaQ[this.qOrder[this.qIndex]].answer_4;
-      console.log('This is index for answerA ===> ', this.answerA);
-      this.a1 = this.answerA[this.aOrder[0]];
-      this.a2 = this.answerA[this.aOrder[1]];
-      this.a3 = this.answerA[this.aOrder[2]];
-      this.a4 = this.answerA[this.aOrder[3]];
-      this.answerA[0] = this.a1;
-      this.answerA[1] = this.a2;
-      this.answerA[2] = this.a3;
-      this.answerA[3] = this.a4;
+      // console.log('This is the order of the answers --> ', this.aOrder);
+      // console.log(
+      //   'displayTriviaQ() SAYS -> ',
+      //   this.triviaQ[this.qOrder[this.qIndex]]
+      // );
+      // console.log('This is index for answer 1 ===> ', this.aOrder[0]);
+      // console.log(
+      //   'This is content for answer 1 from aOrder ===> ',
+      //   this.triviaQ[this.qOrder[this.aOrder[0]]].answer_2
+      // );
+      this.triviaAnswers[0] = this.triviaQ[this.qOrder[this.qIndex]].answer_1;
+      this.triviaAnswers[1] = this.triviaQ[this.qOrder[this.qIndex]].answer_2;
+      this.triviaAnswers[2] = this.triviaQ[this.qOrder[this.qIndex]].answer_3;
+      this.triviaAnswers[3] = this.triviaQ[this.qOrder[this.qIndex]].answer_4;
+      // console.log('This is index for triviaAnswers ===> ', this.triviaAnswers);
+      this.a1 = this.triviaAnswers[this.aOrder[0]];
+      this.a2 = this.triviaAnswers[this.aOrder[1]];
+      this.a3 = this.triviaAnswers[this.aOrder[2]];
+      this.a4 = this.triviaAnswers[this.aOrder[3]];
+      this.triviaAnswers[0] = this.a1;
+      this.triviaAnswers[1] = this.a2;
+      this.triviaAnswers[2] = this.a3;
+      this.triviaAnswers[3] = this.a4;
       this.q = this.triviaQ[this.qOrder[this.qIndex]].question;
       this.correctA = this.triviaQ[this.qOrder[this.qIndex]].correct_answer;
-      console.log('This is the question -> ', this.q);
-      console.log('This is a1 -> ', this.a1);
-      console.log('This is a2 -> ', this.a2);
-      console.log('This is a3 -> ', this.a3);
-      console.log('This is a4 -> ', this.a4);
-      console.log('This is the correct Answer -> ', this.correctA);
-      console.log('This is correctCount -> ', this.correctCount);
       this.qIndex++;
     }
   }
