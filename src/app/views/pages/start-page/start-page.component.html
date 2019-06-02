@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="text-center"> Instructions</h2>
+      <p class="text-center"> Here are the instructions for this game</p>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-12">
+
+      <div class="container-fluid mt-2">
+        <div class="row">
+          <div class="col-12 d-flex justify-content-center">
+            <app-header [header]="'Select a topic'"></app-header>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-6 d-flex justify-content-center my-2">
+            <app-button [routerLink]="['/options','videoGames']" [btnName]="'Video Games'">
+            </app-button>
+          </div>
+          <div class="col-6 d-flex justify-content-center my-2">
+            <app-button [routerLink]="['/options','generalKnowledge']" [btnName]="'General Knowledge'"></app-button>
+          </div>
+          <div class="col-6 d-flex justify-content-center my-2">
+            <app-button [routerLink]="['/options','history']" [btnName]="'History'"></app-button>
+          </div>
+          <div class="col-6 d-flex justify-content-center my-2">
+            <app-button [routerLink]="['/options','scienceNature']" [btnName]="'Science & Nature'"></app-button>
+          </div>
+
+        </div>
+        <!-- <div class="row mt-2">
+          <div class="col-12 d-flex justify-content-center">
+            <app-button [route]="'/options'" [btnName]="'Levels'"></app-button>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
