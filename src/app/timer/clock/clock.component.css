@@ -1,0 +1,26 @@
+p {
+    font-family: Lato;
+  }
+
+.btn {
+    height: 100px;
+    width: 85px;
+    font-size: 55px;
+    text-align: center;
+}
+
+.element {
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    33% {
+      background-color: #001F3F;
+    }
+    0% {
+      background-color: darkgoldenrod;
+    }
+    33% {
+        background-color: darkred;
+    }
+    }

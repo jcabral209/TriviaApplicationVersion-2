@@ -10,6 +10,7 @@ import { GamePageComponent } from './views/pages/game-page/game-page.component';
 import { OptionPageComponent } from './views/pages/option-page/option-page.component';
 import { StartPageComponent } from './views/pages/start-page/start-page.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ClockComponent } from './timer/clock/clock.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { HttpClientModule } from '@angular/common/http';
     ButtonComponent,
     GamePageComponent,
     OptionPageComponent,
-    StartPageComponent
+    StartPageComponent,
+    ClockComponent
   ],
   imports: [
     BrowserModule,
