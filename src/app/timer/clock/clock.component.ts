@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./clock.component.css']
 })
 export class ClockComponent implements OnInit {
-  timeLeft = 60;
+  timeLeft = 10;
   interval;
 
   constructor() { }

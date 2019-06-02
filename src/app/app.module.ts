@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +12,8 @@ import { OptionPageComponent } from './views/pages/option-page/option-page.compo
 import { StartPageComponent } from './views/pages/start-page/start-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ClockComponent } from './timer/clock/clock.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,11 @@ import { ClockComponent } from './timer/clock/clock.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule,
+    ReactiveFormsModule, 
+    FormsModule,
+    CommonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

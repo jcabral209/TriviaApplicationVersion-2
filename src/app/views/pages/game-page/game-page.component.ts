@@ -35,17 +35,28 @@ export class GamePageComponent implements OnInit, OnDestroy {
     private grabDataService: GrabDataService) { }
 
   ngOnInit() {
-    this.initialize();
+    this.varInit();
+  }
+  varInit() {
     this._route.params.subscribe(params => {
       this.levelId = params.levelId;
       this.topic = params.topic;
-      this.getQuestions();
-      this.varInit();
+
     });
-  }
-  initialize() {
     this.triviaQ = [];
-    this.triviaIndex = [];
+    this.qOrder = [];
+    this.aOrder = [];
+    this.triviaAnswers = [];
+    this.qIndex = 0;
+    this.correctCount = 0;
+    this.q = 'Nothing To Display';
+    this.a1 = 'Nothing To Display';
+    this.a2 = 'Nothing To Display';
+    this.a3 = 'Nothing To Display';
+    this.a4 = 'Nothing To Display';
+    this.userA = 'none';
+    this.correctA = '';
+    this.getQuestions();
   }
   getQuestions() {
     this.subscription.add(
@@ -75,27 +86,17 @@ export class GamePageComponent implements OnInit, OnDestroy {
     this.triviaGame.shuffleArray(this.triviaIndex, this.triviaQ.length);
     console.log('This is my trviaQ index Array shuffled -> ', this.triviaIndex); */
   }
-  varInit() {
-    this.triviaQ = [];
-    this.qOrder = [];
-    this.aOrder = [];
-    this.triviaAnswers = [];
-    this.qIndex = 0;
-    this.correctCount = 0;
-    this.q = 'Nothing To Display';
-    this.a1 = 'Nothing To Display';
-    this.a2 = 'Nothing To Display';
-    this.a3 = 'Nothing To Display';
-    this.a4 = 'Nothing To Display';
-    this.userA = 'none';
-    this.correctA = '';
-    // this.getQuestions();
-  }
   displayTriviaQ(ans: string) {
+
+    console.log('This is the correct Answer +++++++++++++++<>>>>>>>>>>>>>', this.correctA);
+    console.log('This is the MY Answer +++++++++++++++<>>>>>>>>>>>>>', ans);
     if (this.qIndex < this.noQuestions) {
-      if (this.qIndex > 0 && ans === this.triviaQ[this.qOrder[this.qIndex]].correct_answer) {
+      if (this.qIndex > 0 && ans === this.correctA) {
+ 
         this.correctCount++;
+        // console.log('Correct Questions +++++++++++++++ >>>>>>', this.correctCount);
       }
+
       this.triviaGame.shuffleArray(this.aOrder, 4);
       // console.log('This is the order of the answers --> ', this.aOrder);
       // console.log(
@@ -123,6 +124,9 @@ export class GamePageComponent implements OnInit, OnDestroy {
       this.q = this.triviaQ[this.qOrder[this.qIndex]].question;
       this.correctA = this.triviaQ[this.qOrder[this.qIndex]].correct_answer;
       this.qIndex++;
+      console.log('this is qIndex', this.qIndex);
+      this.aOrder = [];
+      console.log('this is aOrder', this.aOrder);
     }
   }
   ngOnDestroy() {

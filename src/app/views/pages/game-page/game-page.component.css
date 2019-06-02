@@ -1,5 +1,5 @@
-.btn {
-    width: 400px;
+.btn{
+    min-width: 400px;
     height: auto;
 }
 
