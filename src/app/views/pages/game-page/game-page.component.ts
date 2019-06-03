@@ -1,15 +1,22 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { SpecData } from 'src/app/interfaces/spec-data';
 import { GetDataService } from 'src/app/services/get-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+// import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/internal/Subscription';
 import { GrabDataService } from 'src/app/services/grab-data.service';
+import { Config, CountdownComponent } from 'ngx-countdown';
+
+
+
 @Component({
   selector: 'app-game-page',
   templateUrl: './game-page.component.html',
   styleUrls: ['./game-page.component.css']
 })
 export class GamePageComponent implements OnInit, OnDestroy {
+  config: Config;
+  @ViewChild(CountdownComponent) counter: CountdownComponent;
   subscription: Subscription = new Subscription();
   triviaQ: SpecData[] = [];
   topic: string;
@@ -26,8 +33,10 @@ export class GamePageComponent implements OnInit, OnDestroy {
   a4: string;
   userA: string;
   correctA: string;
-  noQuestions = 10;
+  numQuestions = 10;
   triviaAnswers: any[];
+  skipTotal: number;
+  endGame: boolean;
 
   constructor(private triviaGame: GetDataService,
     private _route: ActivatedRoute,
@@ -56,6 +65,8 @@ export class GamePageComponent implements OnInit, OnDestroy {
     this.a4 = 'Nothing To Display';
     this.userA = 'none';
     this.correctA = '';
+    this.skipTotal = 0;
+    this.endGame = false;
     this.getQuestions();
   }
   getQuestions() {
@@ -90,11 +101,16 @@ export class GamePageComponent implements OnInit, OnDestroy {
 
     console.log('This is the correct Answer +++++++++++++++<>>>>>>>>>>>>>', this.correctA);
     console.log('This is the MY Answer +++++++++++++++<>>>>>>>>>>>>>', ans);
-    if (this.qIndex < this.noQuestions) {
+    if (this.qIndex < this.numQuestions) {
+    
+     
       if (this.qIndex > 0 && ans === this.correctA) {
- 
+
         this.correctCount++;
         // console.log('Correct Questions +++++++++++++++ >>>>>>', this.correctCount);
+      }
+      if (ans === 'Not Answered') {
+        this.skipTotal++;
       }
 
       this.triviaGame.shuffleArray(this.aOrder, 4);
@@ -127,9 +143,50 @@ export class GamePageComponent implements OnInit, OnDestroy {
       console.log('this is qIndex', this.qIndex);
       this.aOrder = [];
       console.log('this is aOrder', this.aOrder);
+
+
+      this.config = {
+        leftTime: 30,
+      };
+      this.counter.restart();
+    } else {
+      if (ans === this.correctA){
+        this.correctCount++;
+      }
+      if (ans === 'Not Answered') {
+        this.skipTotal++;
+      }
+      this.endGame = true;
+      this._router.navigate(['/', 'endGame']).then(nav => {
+        console.log(nav); // true if navigation is successful
+      }, err => {
+        console.log(err) // when there's an error
+      });
+
+
+
     }
   }
+
+
+  resetTimer() {
+    this.counter.restart();
+    this.counter.stop();
+    this.counter.pause();
+    this.counter.resume();
+  }
+  onFinished() {
+    this.displayTriviaQ('Not Answered');
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
+  setEndGameStats() {
+    this.grabDataService.setTotalCorrect(this.correctCount);
+    this.grabDataService.setotalQuestion(this.numQuestions);
+    this.grabDataService.setotalTimeOut(this.skipTotal);
+  }
 }
+

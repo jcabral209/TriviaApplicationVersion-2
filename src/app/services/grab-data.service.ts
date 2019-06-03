@@ -9,6 +9,10 @@ import * as _ from 'lodash';
 })
 export class GrabDataService {
 
+  private totalCorrect = 0;
+  private totalTimeOut = 0;
+  private totalQuestion = 0;
+
   constructor(private dataService: DataService) { }
   getTriviaQuestions(topic: string, gameLevel: string) {
     const keys = [{ key: '1age3SHskms1aDJELbscpmiJ_GceFJiWVB3q4IDxFFD8/', topic: 'videoGames' },
@@ -19,7 +23,7 @@ export class GrabDataService {
     const apiURLpt1 = 'https://spreadsheets.google.com/feeds/list/';
     const apiURLpt2 = '/public/values?alt=json';
     // console.log('Topic lm filtering by is: ', topic);
-    let locatedKey = _.filter(keys, function (o) { return o.topic == topic; });
+    const locatedKey = _.filter(keys, function(o) { return o.topic == topic; });
     // console.log('This is my key =====>', locatedKey);
     return this.dataService
         .getURL(apiURLpt1 + locatedKey[0].key + gameLevel + apiURLpt2);
@@ -52,4 +56,29 @@ export class GrabDataService {
     // var myArray = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     // console.log ('My triviaQ ++++++> ', this.triviaQ);
   }
+
+  setTotalCorrect(totalCorrect: number) {
+    this.totalCorrect = totalCorrect;
+  }
+
+  setotalTimeOut(totalTimeOut: number) {
+    this.totalTimeOut = totalTimeOut;
+  }
+
+  setotalQuestion(totalQuestion: number) {
+    this.totalQuestion = totalQuestion;
+  }
+
+  getTotalCorrect() {
+    return this.totalCorrect;
+  }
+
+  getotalTimeOut() {
+   return  this.totalTimeOut;
+  }
+
+  getotalQuestion() {
+    return this.totalQuestion;
+  }
+
 }

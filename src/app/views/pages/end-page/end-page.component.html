@@ -1,0 +1,22 @@
+<div class="container">
+
+  <div class="row my-5">
+
+    <div class="col-3 text-center">Total Questions</div>
+    <div class="col-3 text-center">Total Correct Answer(s)</div>
+    <div class="col-3 text-center">Total Skipped Answer(s)</div>
+    <div class="col-3 text-center">Total Incorrect Answer(s)</div>
+    <hr>
+    <div class="col-3 text-center">{{totalQuestion}}</div>
+    <div class="col-3 text-center">{{totalCorrect}}</div>
+    <div class="col-3 text-center">{{totalTimeOut}}</div>
+    <div class="col-3 text-center">{{totalQuestion-totalCorrect-totalTimeOut}}</div>
+    <div class="col-12 my-5 text-center">
+
+        <app-button [routerLink]="['/title']" [btnName]="'Start New Game'"></app-button>
+
+    </div>
+
+
+  </div>
+  <hr>

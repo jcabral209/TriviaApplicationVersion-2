@@ -25,11 +25,8 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-12">
-      <h2 class="text-center">
-        <app-clock></app-clock>
-      </h2>
-
+    <div class="col-12 text-center">
+        <countdown [config] = "{leftTime: 30}" (finished)="onFinished()" class="count-down" style="display: inline;">$!s!</countdown>
     </div>
   </div>
   <hr>
@@ -61,30 +58,36 @@
     <div class="col-6">
       <div class=" btn d-flex justify-content-center mt-2">
         <button (click)="displayTriviaQ(a1)" class="btn btn-primary">{{a1}}</button>
+        <!-- <app-clock [iPauseTimer] = "'pauseTimer()'" ></app-clock> -->
       </div>
     </div>
 
     <div class="col-6">
       <div class=" btn d-flex justify-content-center mt-2">
-        <button (click)="displayTriviaQ(a2)" class="btn btn-primary">{{a2}}</button>
+        <button (click)="displayTriviaQ(a2); pauseTimer(time)" class="btn btn-primary">{{a2}}</button>
       </div>
     </div>
 
     <div class="col-6">
       <div class="btn d-flex justify-content-center mt-2">
-        <button (click)="displayTriviaQ(a3)" class="btn btn-primary">{{a3}}</button>
+        <button (click)="displayTriviaQ(a3); pauseTimer(time)" class="btn btn-primary">{{a3}}</button>
       </div>
     </div>
 
     <div class="col-6">
       <div class="btn d-flex justify-content-center mt-2">
-        <button (click)="displayTriviaQ(a4)" class="btn btn-primary">{{a4}}</button>
+        <button (click)="displayTriviaQ(a4); pauseTimer()" class="btn btn-primary">{{a4}}</button>
       </div>
     </div>
 
     <div class="col-12">
       {{correctA}}
     </div>
+    <div *ngIf = 'endGame' class="col-12">
+      <a [routerLink] = "['/endGame']" [routerLinkActive] = "['active']" ></a>
+    </div> 
+        
+   
 
   </div>
 </div>
