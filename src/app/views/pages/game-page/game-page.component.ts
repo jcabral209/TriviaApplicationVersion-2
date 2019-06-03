@@ -12,7 +12,9 @@ import { Config, CountdownComponent } from 'ngx-countdown';
   styleUrls: ['./game-page.component.css']
 })
 export class GamePageComponent implements OnInit, OnDestroy {
-  config: Config;
+  config: Config = {
+    leftTime: 20,
+  };
   @ViewChild(CountdownComponent) counter: CountdownComponent;
   subscription: Subscription = new Subscription();
   triviaQ: SpecData[] = [];
@@ -127,9 +129,6 @@ export class GamePageComponent implements OnInit, OnDestroy {
       this.correctA = this.triviaQ[this.qOrder[this.qIndex]].correct_answer;
       this.qIndex++;
       this.aOrder = [];
-      this.config = {
-        leftTime: 30,
-      };
       this.counter.restart();
     } else {
       if (ans === this.correctA) {
@@ -156,8 +155,8 @@ export class GamePageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
     this.setEndGameStats();
+    this.subscription.unsubscribe();
   }
 
   setEndGameStats() {
