@@ -5,7 +5,6 @@ import { CountdownModule } from 'ngx-countdown';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MainPageComponent } from './views/pages/main-page/main-page.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { ButtonComponent } from './shared/button/button.component';
 import { GamePageComponent } from './views/pages/game-page/game-page.component';
@@ -24,7 +23,6 @@ import { EndPageComponent } from './views/pages/end-page/end-page.component';
 @NgModule({
   declarations: [
     AppComponent,
-    MainPageComponent,
     HeaderComponent,
     ButtonComponent,
     GamePageComponent,
