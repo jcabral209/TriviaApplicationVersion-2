@@ -156,6 +156,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.setEndGameStats();
     this.subscription.unsubscribe();
   }
 

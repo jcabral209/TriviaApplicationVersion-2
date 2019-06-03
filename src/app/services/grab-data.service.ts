@@ -59,14 +59,17 @@ export class GrabDataService {
 
   setTotalCorrect(totalCorrect: number) {
     this.totalCorrect = totalCorrect;
+    console.log('setting total: '+this.totalCorrect);
   }
 
   setTotalTimeOut(totalTimeOut: number) {
     this.totalTimeOut = totalTimeOut;
+    console.log(this.totalTimeOut);
   }
 
   setTotalQuestion(totalQuestion: number) {
     this.totalQuestion = totalQuestion;
+    console.log(this.totalQuestion);
   }
 
   getTotalCorrect() {
