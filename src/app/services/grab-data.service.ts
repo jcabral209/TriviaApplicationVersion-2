@@ -45,14 +45,14 @@ export class GrabDataService {
       index = Math.floor(Math.random() * len);
       // Decrease len by 1
       // console.log('INSIDE WHILE  ---> ' + index);
-      // len--;
+      len--;
       // And swap the last element with it
       temp = array[len];
       array[len] = array[index];
       array[index] = temp;
     }
     // console.log('This is the index order of the ARRAY -> ', array);
-    // return array;
+    return array;
     // var myArray = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     // console.log ('My triviaQ ++++++> ', this.triviaQ);
   }
