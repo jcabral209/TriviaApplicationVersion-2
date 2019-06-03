@@ -16,8 +16,8 @@ export class EndPageComponent implements OnInit {
   ngOnInit() {
 
 this.totalCorrect = this.grabDataServices.getTotalCorrect();
-this.totalTimeOut = this.grabDataServices.getotalTimeOut();
-this.totalQuestion = this.grabDataServices.getotalQuestion();
+this.totalTimeOut = this.grabDataServices.getTotalTimeOut();
+this.totalQuestion = this.grabDataServices.getTotalQuestion();
   }
 
 }

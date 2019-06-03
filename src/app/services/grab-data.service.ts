@@ -9,9 +9,9 @@ import * as _ from 'lodash';
 })
 export class GrabDataService {
 
-  private totalCorrect = 0;
-  private totalTimeOut = 0;
-  private totalQuestion = 0;
+  public totalCorrect = 0;
+  public totalTimeOut = 0;
+  public totalQuestion = 0;
 
   constructor(private dataService: DataService) { }
   getTriviaQuestions(topic: string, gameLevel: string) {
@@ -23,7 +23,7 @@ export class GrabDataService {
     const apiURLpt1 = 'https://spreadsheets.google.com/feeds/list/';
     const apiURLpt2 = '/public/values?alt=json';
     // console.log('Topic lm filtering by is: ', topic);
-    const locatedKey = _.filter(keys, function(o) { return o.topic == topic; });
+    const locatedKey = _.filter(keys, function(o) { return o.topic === topic; });
     // console.log('This is my key =====>', locatedKey);
     return this.dataService
         .getURL(apiURLpt1 + locatedKey[0].key + gameLevel + apiURLpt2);
@@ -61,11 +61,11 @@ export class GrabDataService {
     this.totalCorrect = totalCorrect;
   }
 
-  setotalTimeOut(totalTimeOut: number) {
+  setTotalTimeOut(totalTimeOut: number) {
     this.totalTimeOut = totalTimeOut;
   }
 
-  setotalQuestion(totalQuestion: number) {
+  setTotalQuestion(totalQuestion: number) {
     this.totalQuestion = totalQuestion;
   }
 
@@ -73,11 +73,11 @@ export class GrabDataService {
     return this.totalCorrect;
   }
 
-  getotalTimeOut() {
+  getTotalTimeOut() {
    return  this.totalTimeOut;
   }
 
-  getotalQuestion() {
+  getTotalQuestion() {
     return this.totalQuestion;
   }
 

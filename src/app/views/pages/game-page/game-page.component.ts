@@ -2,12 +2,9 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { SpecData } from 'src/app/interfaces/spec-data';
 import { GetDataService } from 'src/app/services/get-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
-// import { Subscription } from 'rxjs';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { GrabDataService } from 'src/app/services/grab-data.service';
 import { Config, CountdownComponent } from 'ngx-countdown';
-
-
 
 @Component({
   selector: 'app-game-page',
@@ -26,6 +23,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
   aOrder: any[] = [];
   qIndex: number;
   correctCount: number;
+  cat: string;
   q: string;
   a1: string;
   a2: string;
@@ -36,12 +34,13 @@ export class GamePageComponent implements OnInit, OnDestroy {
   numQuestions = 10;
   triviaAnswers: any[];
   skipTotal: number;
+  totalQuestions: number;
   endGame: boolean;
 
   constructor(private triviaGame: GetDataService,
-    private _route: ActivatedRoute,
-    private _router: Router,
-    private grabDataService: GrabDataService) { }
+              private _route: ActivatedRoute,
+              private _router: Router,
+              private grabDataService: GrabDataService) { }
 
   ngOnInit() {
     this.varInit();
@@ -58,6 +57,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
     this.triviaAnswers = [];
     this.qIndex = 0;
     this.correctCount = 0;
+    this.cat = 'Nothing To Display';
     this.q = 'Nothing To Display';
     this.a1 = 'Nothing To Display';
     this.a2 = 'Nothing To Display';
@@ -66,6 +66,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
     this.userA = 'none';
     this.correctA = '';
     this.skipTotal = 0;
+    this.totalQuestions = 11;
     this.endGame = false;
     this.getQuestions();
   }
@@ -73,7 +74,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.grabDataService.getTriviaQuestions(this.topic, this.levelId).subscribe(
         x => {
-          // console.log('This my NEW API call --->>>> ', x);
+
           for (const q of x.feed.entry) {
             const nfo: SpecData = {
               category: q['gsx$category']['$t'],
@@ -86,49 +87,33 @@ export class GamePageComponent implements OnInit, OnDestroy {
               correct_answer: q['gsx$correctanswer']['$t']
             };
             this.triviaQ.push(nfo);
-            // console.log ('My triviaQ ++++++> ', this.triviaQ.length);
           }
           this.triviaGame.shuffleArray(this.qOrder, this.triviaQ.length);
           this.displayTriviaQ(this.userA);
         }
       ));
-    /* console.log('This is what I have in triviaQ', Object.getOwnPropertyNames(this.triviaQ));
-    console.log('This is length -->', this.triviaQ);
-    this.triviaGame.shuffleArray(this.triviaIndex, this.triviaQ.length);
-    console.log('This is my trviaQ index Array shuffled -> ', this.triviaIndex); */
   }
   displayTriviaQ(ans: string) {
-
-    console.log('This is the correct Answer +++++++++++++++<>>>>>>>>>>>>>', this.correctA);
-    console.log('This is the MY Answer +++++++++++++++<>>>>>>>>>>>>>', ans);
     if (this.qIndex < this.numQuestions) {
-    
-     
+
       if (this.qIndex > 0 && ans === this.correctA) {
 
         this.correctCount++;
-        // console.log('Correct Questions +++++++++++++++ >>>>>>', this.correctCount);
+        this.totalQuestions--;
+      } else {
+        this.totalQuestions--;
       }
+
       if (ans === 'Not Answered') {
         this.skipTotal++;
+        this.totalQuestions--;
       }
 
       this.triviaGame.shuffleArray(this.aOrder, 4);
-      // console.log('This is the order of the answers --> ', this.aOrder);
-      // console.log(
-      //   'displayTriviaQ() SAYS -> ',
-      //   this.triviaQ[this.qOrder[this.qIndex]]
-      // );
-      // console.log('This is index for answer 1 ===> ', this.aOrder[0]);
-      // console.log(
-      //   'This is content for answer 1 from aOrder ===> ',
-      //   this.triviaQ[this.qOrder[this.aOrder[0]]].answer_2
-      // );
       this.triviaAnswers[0] = this.triviaQ[this.qOrder[this.qIndex]].answer_1;
       this.triviaAnswers[1] = this.triviaQ[this.qOrder[this.qIndex]].answer_2;
       this.triviaAnswers[2] = this.triviaQ[this.qOrder[this.qIndex]].answer_3;
       this.triviaAnswers[3] = this.triviaQ[this.qOrder[this.qIndex]].answer_4;
-      // console.log('This is index for triviaAnswers ===> ', this.triviaAnswers);
       this.a1 = this.triviaAnswers[this.aOrder[0]];
       this.a2 = this.triviaAnswers[this.aOrder[1]];
       this.a3 = this.triviaAnswers[this.aOrder[2]];
@@ -138,19 +123,16 @@ export class GamePageComponent implements OnInit, OnDestroy {
       this.triviaAnswers[2] = this.a3;
       this.triviaAnswers[3] = this.a4;
       this.q = this.triviaQ[this.qOrder[this.qIndex]].question;
+      this.cat = this.triviaQ[this.qOrder[this.qIndex]].category;
       this.correctA = this.triviaQ[this.qOrder[this.qIndex]].correct_answer;
       this.qIndex++;
-      console.log('this is qIndex', this.qIndex);
       this.aOrder = [];
-      console.log('this is aOrder', this.aOrder);
-
-
       this.config = {
         leftTime: 30,
       };
       this.counter.restart();
     } else {
-      if (ans === this.correctA){
+      if (ans === this.correctA) {
         this.correctCount++;
       }
       if (ans === 'Not Answered') {
@@ -158,16 +140,10 @@ export class GamePageComponent implements OnInit, OnDestroy {
       }
       this.endGame = true;
       this._router.navigate(['/', 'endGame']).then(nav => {
-        console.log(nav); // true if navigation is successful
       }, err => {
-        console.log(err) // when there's an error
       });
-
-
-
     }
   }
-
 
   resetTimer() {
     this.counter.restart();
@@ -185,8 +161,8 @@ export class GamePageComponent implements OnInit, OnDestroy {
 
   setEndGameStats() {
     this.grabDataService.setTotalCorrect(this.correctCount);
-    this.grabDataService.setotalQuestion(this.numQuestions);
-    this.grabDataService.setotalTimeOut(this.skipTotal);
+    this.grabDataService.setTotalQuestion(this.numQuestions);
+    this.grabDataService.setTotalTimeOut(this.skipTotal);
   }
 }
 
