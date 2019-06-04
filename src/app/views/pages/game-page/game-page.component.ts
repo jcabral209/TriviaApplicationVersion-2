@@ -25,6 +25,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
   aOrder: any[] = [];
   qIndex: number;
   correctCount: number;
+  wrongCount: number;
   cat: string;
   q: string;
   a1: string;
@@ -59,6 +60,7 @@ export class GamePageComponent implements OnInit, OnDestroy {
     this.triviaAnswers = [];
     this.qIndex = 0;
     this.correctCount = 0;
+    this.wrongCount = 0;
     this.cat = 'Nothing To Display';
     this.q = 'Nothing To Display';
     this.a1 = 'Nothing To Display';
@@ -98,45 +100,49 @@ export class GamePageComponent implements OnInit, OnDestroy {
   displayTriviaQ(ans: string) {
     if (this.qIndex < this.numQuestions) {
 
-      if (this.qIndex > 0 && ans === this.correctA) {
+ this.triviaGame.shuffleArray(this.aOrder, 4);
+ this.triviaAnswers[0] = this.triviaQ[this.qOrder[this.qIndex]].answer_1;
+ this.triviaAnswers[1] = this.triviaQ[this.qOrder[this.qIndex]].answer_2;
+ this.triviaAnswers[2] = this.triviaQ[this.qOrder[this.qIndex]].answer_3;
+ this.triviaAnswers[3] = this.triviaQ[this.qOrder[this.qIndex]].answer_4;
+ this.a1 = this.triviaAnswers[this.aOrder[0]];
+ this.a2 = this.triviaAnswers[this.aOrder[1]];
+ this.a3 = this.triviaAnswers[this.aOrder[2]];
+ this.a4 = this.triviaAnswers[this.aOrder[3]];
+ this.triviaAnswers[0] = this.a1;
+ this.triviaAnswers[1] = this.a2;
+ this.triviaAnswers[2] = this.a3;
+ this.triviaAnswers[3] = this.a4;
+ this.q = this.triviaQ[this.qOrder[this.qIndex]].question;
+ this.cat = this.triviaQ[this.qOrder[this.qIndex]].category;
+ this.correctA = this.triviaQ[this.qOrder[this.qIndex]].correct_answer;
 
-        this.correctCount++;
-        this.totalQuestions--;
-      } else {
-        this.totalQuestions--;
-      }
+ if (this.qIndex > 0 && ans === this.correctA) {
+          this.correctCount++;
+        } else {
+          this.wrongCount++;
+        }
 
-      if (ans === 'Not Answered') {
+
+ if (this.qIndex > 0 && ans === 'Not Answered') {
         this.skipTotal++;
-        this.totalQuestions--;
-      }
+        }
 
-      this.triviaGame.shuffleArray(this.aOrder, 4);
-      this.triviaAnswers[0] = this.triviaQ[this.qOrder[this.qIndex]].answer_1;
-      this.triviaAnswers[1] = this.triviaQ[this.qOrder[this.qIndex]].answer_2;
-      this.triviaAnswers[2] = this.triviaQ[this.qOrder[this.qIndex]].answer_3;
-      this.triviaAnswers[3] = this.triviaQ[this.qOrder[this.qIndex]].answer_4;
-      this.a1 = this.triviaAnswers[this.aOrder[0]];
-      this.a2 = this.triviaAnswers[this.aOrder[1]];
-      this.a3 = this.triviaAnswers[this.aOrder[2]];
-      this.a4 = this.triviaAnswers[this.aOrder[3]];
-      this.triviaAnswers[0] = this.a1;
-      this.triviaAnswers[1] = this.a2;
-      this.triviaAnswers[2] = this.a3;
-      this.triviaAnswers[3] = this.a4;
-      this.q = this.triviaQ[this.qOrder[this.qIndex]].question;
-      this.cat = this.triviaQ[this.qOrder[this.qIndex]].category;
-      this.correctA = this.triviaQ[this.qOrder[this.qIndex]].correct_answer;
-      this.qIndex++;
-      this.aOrder = [];
-      this.counter.restart();
+ this.totalQuestions--;
+ this.qIndex++;
+ this.aOrder = [];
+ this.counter.restart();
+
     } else {
-      if (ans === this.correctA) {
-        this.correctCount++;
-      }
-      if (ans === 'Not Answered') {
-        this.skipTotal++;
-      }
+      if (this.qIndex === 10 && ans === this.correctA) {
+        this.correctCount++; } else {
+          this.correctCount++;
+        }
+      if (this.qIndex === 0 && ans === 'Not Answered') {
+        this.skipTotal++; }
+
+      this.totalQuestions--;
+
       this.endGame = true;
       this._router.navigate(['/', 'endGame']).then(nav => {
       }, err => {
