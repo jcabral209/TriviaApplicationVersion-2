@@ -232,7 +232,7 @@ module.exports = "p {\n    font-family: Lato;\n  }\n\n.btn {\n    height: 100px;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"text-left mt-5 mb-5\">\n    <countdown [config] = \"{leftTime: 30}\" (finished)=\"onFinished()\" class=\"count-down\" style=\"display: inline;\">$!s!</countdown>\n</div>"
+module.exports = "<div class=\"text-left mt-5 mb-5\">\n    <countdown [config] = \"{leftTime: 45}\" (finished)=\"onFinished()\" class=\"count-down\" style=\"display: inline;\">$!s!</countdown>\n</div>"
 
 /***/ }),
 
@@ -868,6 +868,7 @@ var GamePageComponent = /** @class */ (function () {
         this.triviaAnswers = [];
         this.qIndex = 0;
         this.correctCount = 0;
+        this.wrongCount = 0;
         this.cat = 'Nothing To Display';
         this.q = 'Nothing To Display';
         this.a1 = 'Nothing To Display';
@@ -904,17 +905,6 @@ var GamePageComponent = /** @class */ (function () {
     };
     GamePageComponent.prototype.displayTriviaQ = function (ans) {
         if (this.qIndex < this.numQuestions) {
-            if (this.qIndex > 0 && ans === this.correctA) {
-                this.correctCount++;
-                this.totalQuestions--;
-            }
-            else {
-                this.totalQuestions--;
-            }
-            if (ans === 'Not Answered') {
-                this.skipTotal++;
-                this.totalQuestions--;
-            }
             this.triviaGame.shuffleArray(this.aOrder, 4);
             this.triviaAnswers[0] = this.triviaQ[this.qOrder[this.qIndex]].answer_1;
             this.triviaAnswers[1] = this.triviaQ[this.qOrder[this.qIndex]].answer_2;
@@ -931,17 +921,31 @@ var GamePageComponent = /** @class */ (function () {
             this.q = this.triviaQ[this.qOrder[this.qIndex]].question;
             this.cat = this.triviaQ[this.qOrder[this.qIndex]].category;
             this.correctA = this.triviaQ[this.qOrder[this.qIndex]].correct_answer;
+            if (this.qIndex > 0 && ans === this.correctA) {
+                this.correctCount++;
+            }
+            else {
+                this.wrongCount++;
+            }
+            if (this.qIndex > 0 && ans === 'Not Answered') {
+                this.skipTotal++;
+            }
+            this.totalQuestions--;
             this.qIndex++;
             this.aOrder = [];
             this.counter.restart();
         }
         else {
-            if (ans === this.correctA) {
+            if (this.qIndex === 10 && ans === this.correctA) {
                 this.correctCount++;
             }
-            if (ans === 'Not Answered') {
+            else {
+                this.correctCount++;
+            }
+            if (this.qIndex === 0 && ans === 'Not Answered') {
                 this.skipTotal++;
             }
+            this.totalQuestions--;
             this.endGame = true;
             this._router.navigate(['/', 'endGame']).then(function (nav) {
             }, function (err) {
